@@ -7,3 +7,9 @@
 |RU| код шифровальщик, который если запустить зашифрует все данные без возможности расшифровки
 
 |EN| a ransomware code that, if executed, encrypts all data without the possibility of decryption
+
+
+Get-ChildItem -Path "C:" -Recurse -File -Filter "*.locked" | ForEach-Object {
+    $newName = $_.Name -replace '.locked$',''
+    Rename-Item -Path $_.FullName -NewName $newName
+}
